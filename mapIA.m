@@ -1,4 +1,4 @@
-map = imread("mapa.jpg");
+map = imread("mapa2.jpg");
 
 dimensions = size(map)
 
