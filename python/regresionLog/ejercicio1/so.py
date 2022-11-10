@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 
 # Cargar la información del fichero CSV
-dataframe = pd.read_csv(r"usuarios_win_mac_lin.csv")
+dataframe = pd.read_csv(r"ejercicio1/usuarios_win_mac_lin.csv")
 
 # Visualizar las 5 primeras filas del fichero
 dataframe.head()
