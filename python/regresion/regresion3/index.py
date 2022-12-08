@@ -180,3 +180,8 @@ print("Error o pérdida del modelo de regresión lineal para valores de test")
 print("ECM : %.2f" % mean_squared_error(y_test, y_pred_test))
 # Puntaje de Varianza. El mejor puntaje es un 1.0
 print('Coeficiente Correlacción: %.2f' % r2_score(y_test, y_pred_test))
+
+# Predecir la concentración de CO2 para una anomalía de 0.8, nivel medio del
+mar de 0.3 y masa media de los glaciares del mundo de -6.8
+y_pred2 = regr.predict([[0.8,0.3,-6.8]])
+print('La predicción de CO2 para X1=0.8, X2=0.3 y X3=-6.8 es: ',y_pred2)
