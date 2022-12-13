@@ -71,3 +71,5 @@ plt.show()
 coeffs = np.polyfit(x_test,y_test,deg=17)
 y_pred = np.polyval(np.poly1d(coeffs), 6)
 print("Predicción para X=6: y=",y_pred) 
+
+# Mientras más aumenta el grado del polinomio el error disminuye pero esto puede dar lugar al overfitting

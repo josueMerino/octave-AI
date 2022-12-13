@@ -74,3 +74,5 @@ plt.show()
 coeffs = np.polyfit(x_test,y_test,deg=17)
 y_pred = np.polyval(np.poly1d(coeffs), 6)
 print("Predicción para X=6: y=",y_pred) 
+
+# El error se dispara debido a que los datos se desordenan y luego se hace la partición
