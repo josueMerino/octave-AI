@@ -12,7 +12,7 @@ filled=True,
 rounded=True,
 special_characters=True)
 
-pred1=clf.predict([[7,3,5,1]])
+pred1=clf.predict([[4,2,3,1]])
 print("Tipo de flor: ",iris.target_names[pred1])
 
 

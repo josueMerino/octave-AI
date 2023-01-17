@@ -100,6 +100,6 @@ print("ECM : %.2f" % mean_squared_error(y_test, y_pred_test))
 print('Coeficiente Correlacción: %.2f' % r2_score(y_test, y_pred_test))
 
 # Predecir la etiqueta ‘y’ para un valor X=50
-y_pred2 = regr.predict(50)
+y_pred2 = regr.predict([[50]])
 print('La predicción de y para un valor X de 50 es: ',y_pred2)
 
