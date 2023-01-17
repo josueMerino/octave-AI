@@ -2,43 +2,74 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.metrics import mean_squared_error
+
+
+def regresion(x, y, x_test, y_test, color='red', grado=1):
+    # obtener los coeficientes del polinomio
+    coeffs = np.polyfit(x, y, deg=grado)
+
+    # obtener el polinomio
+    p = np.poly1d(coeffs, variable='X')
+    print("Polinomio de grado ", grado, " : ")
+    print(p)
+    print("")
+
+    # obtener los valores predichos para los valores de entrenamiento
+    y_pred = np.polyval(p, x)
+
+    # obtener el error cuadrático medio para los valores de entrenamiento
+    print('Error cuadrático medio para los valores de entrenamiento: %.2f\n' %
+          mean_squared_error(y, y_pred))
+
+    # obtener el coeficiente de correlación de pearson para los valores de entrenamiento
+    print('Correlación de Pearson para los valores de entrenamiento: %.2f\n' %
+          np.corrcoef(y, y_pred)[0, 1])
+
+    # obtener los valores predichos para los valores de test
+    y_pred_test = np.polyval(p, x_test)
+
+    # obtener el error cuadrático medio para los valores de test
+    print('Error cuadrático medio para los valores de test: %.2f\n' %
+          mean_squared_error(y_test, y_pred_test))
+
+    # obtener el coeficiente de correlación de pearson para los valores de test
+    print('Correlación de Pearson para los valores de entrenamiento: %.2f\n' %
+          np.corrcoef(y_test, y_pred_test)[0, 1])
+
+    # graficar el polinomio
+    plt.plot(x, y_pred, color=color, linewidth=2, label="grado% d" % grado)
+
 
 csvData = pd.read_csv("data12.csv")
 
-print(csvData['col1'])
-
 x = csvData.iloc[:, 0].values
 y = csvData.iloc[:, 1].values
+
+# Desordenar los datos
+np.random.RandomState(1).shuffle(x)
+np.random.RandomState(1).shuffle(y)
 
 n_data = len(x)
 
 n_train = int(n_data * 0.8)
 
+x_train = np.array(x[:n_train])
+y_train = np.array(y[:n_train])
 
+x_test = np.array(x[n_train:])
+y_test = np.array(y[n_train:])
 
-x_plot = randomOpeningData.index[20:]
-y_plot = randomOpeningData['col1'][20:]
+# ordenar los datos
+idx = np.argsort(x_train)
+x_train = x_train[idx]
+y_train = y_train[idx]
 
+idx = np.argsort(x_test)
+x_test = x_test[idx]
+y_test = y_test[idx]
 
-x = randomOpeningData.index
-x_train = np.sort(x[20:])
-y_train = randomOpeningData['col1'][20:]
-x_test = np.sort(x[:20])
-y_test = randomOpeningData['col1'][:20]
-
-colors = ['red', 'orange', 'green', 'black']
-
-
-# Definir la anchura de la linea a dibujar
-lw = 2
-
-# # Dibujar la gráfica teórica f(x)
-plt.plot(x_plot, y_plot, color='blue', linewidth=lw, label="Función teórica")
-# # y los puntos utilizados para entrenamiento
-plt.scatter(x_train, y_train, color='navy', s=30,
-            marker='o', label="Puntos de entrenamiento")
-plt.title("Función teórica y puntos de entrenamiento")
-plt.show()
+colors = ['red', 'orange', 'green', 'purple']
 
 # REGRESION POLINOMICA (utilizando la función polyfit de la librería numpy)
 print("Ajuste de Regresión polinómica")
@@ -48,39 +79,24 @@ print("Ajuste de Regresión polinómica")
 # Polinomio de grado 5: y = t0+t1*X+t2*X^2+t3*X^3+t4*X^4+t5*X^5
 # Dibujar la gráfica teórica f(x)
 plt.title("Regresión polinómica")
-plt.plot(x_plot, y_plot, color='blue', linewidth=lw, label="Función teórica")
-# y los puntos utilizados para entrenamiento
-plt.scatter(x_train, y_train, color='navy', s=30,
-            marker='o', label="Puntos de entrenamiento")
+
 
 for count, degree in enumerate([2, 8, 17]):
-    # Ajuste del polinomio de grado 'degree' a los datos de entrenamiento x,y
-    coeffs = np.polyfit(x_train, y_train, deg=degree)
-    # Determinar y escribir la forma del polinomio
-    p = np.poly1d(np.polyfit(x_train, y_train, deg=degree), variable='X')
-    print("Polinomio de grado ", degree, " : ")
-    print(p)
-    print("")
+    regresion(x_train, y_train, x_test, y_test,
+              color=colors[count], grado=degree)
 
-    y_pred = np.polyval(np.poly1d(coeffs), x_train)
-    print("Error cuadrático medio (ECM): ", 1/20*(sum((y_train-y_pred)**2)))
-    print("")
-    print(y_pred)
-    # Dibujar la gráfica del polinomio
-    # Calcular la y de la gráfica 'y_plot'
-    y_plot = np.polyval(np.poly1d(coeffs), x_plot)
-    # Dibujar la gráfica
-    plt.plot(x_plot, y_plot, color=colors[count],
-             linewidth=lw, label="grado %d" % degree)
+plt.scatter(x_train, y_train, color='black')
+
+plt.scatter(x_test, y_test, color='red')
 
 # Leyenda del gráfico
 plt.legend(loc='lower left')
 # Dibujar el gráfico
 plt.show()
 
-# Predecir para un valor de X=6 con el modelo de regresión polinómica de grado 5
+# Predecir para un valor de X=6 con el modelo de regresión polinómica de grado 17
 coeffs = np.polyfit(x_test, y_test, deg=17)
 y_pred = np.polyval(np.poly1d(coeffs), 6)
 print("Predicción para X=6: y=", y_pred)
 
-# El error se dispara debido a que los datos se desordenan y luego se hace la partición
+# Mientras más aumenta el grado del polinomio el error disminuye pero esto puede dar lugar al overfitting
